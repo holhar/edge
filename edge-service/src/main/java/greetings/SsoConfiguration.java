@@ -21,13 +21,13 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @EnableOAuth2Sso
 class SsoConfiguration extends WebSecurityConfigurerAdapter {
 
- @Override
- protected void configure(HttpSecurity http) throws Exception {
-  // @formatter:off
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        // @formatter:off
         http.antMatcher("/**").authorizeRequests() // <3>
-                .antMatchers( "/", "/app.js", "/login**", "/webjars/**").permitAll().anyRequest()
+                .antMatchers("/", "/app.js", "/login**", "/webjars/**").permitAll().anyRequest()
                 .authenticated().and().logout().logoutSuccessUrl("/").permitAll().and().csrf()
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
-    // @formatter:on
- }
+        // @formatter:on
+    }
 }

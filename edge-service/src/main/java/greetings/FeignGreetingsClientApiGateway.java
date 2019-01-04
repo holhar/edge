@@ -12,16 +12,16 @@ import java.util.Map;
 @RequestMapping("/api")
 class FeignGreetingsClientApiGateway {
 
- private final GreetingsClient greetingsClient;
+    private final GreetingsClient greetingsClient;
 
- @Autowired
- FeignGreetingsClientApiGateway(GreetingsClient greetingsClient) {
-  this.greetingsClient = greetingsClient;
- }
+    @Autowired
+    FeignGreetingsClientApiGateway(GreetingsClient greetingsClient) {
+        this.greetingsClient = greetingsClient;
+    }
 
- // <2>
- @GetMapping("/feign/{name}")
- Map<String, String> feign(@PathVariable String name) {
-  return this.greetingsClient.greet(name);
- }
+    // <2>
+    @GetMapping("/feign/{name}")
+    Map<String, String> feign(@PathVariable String name) {
+        return this.greetingsClient.greet(name);
+    }
 }

@@ -21,43 +21,43 @@ import java.util.stream.Collectors;
 @Configuration
 public class ClientConfiguration {
 
- private final LoadBalancerClient loadBalancerClient;
+    private final LoadBalancerClient loadBalancerClient;
 
- @Autowired
- public ClientConfiguration(LoadBalancerClient client) {
-  this.loadBalancerClient = client;
- }
+    @Autowired
+    public ClientConfiguration(LoadBalancerClient client) {
+        this.loadBalancerClient = client;
+    }
 
- @Bean
- ClientDetailsService clientDetailsService(ClientRepository clientRepository) {
-  return clientId -> clientRepository
-   .findByClientId(clientId)
-   .map(
-    client -> {
+    @Bean
+    ClientDetailsService clientDetailsService(ClientRepository clientRepository) {
+        return clientId -> clientRepository
+                .findByClientId(clientId)
+                .map(
+                        client -> {
 
-     BaseClientDetails details = new BaseClientDetails(client.getClientId(),
-      null, client.getScopes(), client.getAuthorizedGrantTypes(), client
-       .getAuthorities());
-     details.setClientSecret(client.getSecret());
+                            BaseClientDetails details = new BaseClientDetails(client.getClientId(),
+                                    null, client.getScopes(), client.getAuthorizedGrantTypes(), client
+                                    .getAuthorities());
+                            details.setClientSecret(client.getSecret());
 
-     // <1>
-     // details.setAutoApproveScopes
-     //    (Arrays.asList(client.getAutoApproveScopes().split(",")));
+                            // <1>
+                            // details.setAutoApproveScopes
+                            //    (Arrays.asList(client.getAutoApproveScopes().split(",")));
 
-     // <2>
-     String greetingsClientRedirectUri = Optional
-      .ofNullable(this.loadBalancerClient.choose("greetings-client"))
-      .map(si -> "http://" + si.getHost() + ':' + si.getPort() + '/')
-      .orElseThrow(
-       () -> new ClientRegistrationException(
-        "couldn't find and bind a greetings-client IP"));
+                            // <2>
+                            String greetingsClientRedirectUri = Optional
+                                    .ofNullable(this.loadBalancerClient.choose("greetings-client"))
+                                    .map(si -> "http://" + si.getHost() + ':' + si.getPort() + '/')
+                                    .orElseThrow(
+                                            () -> new ClientRegistrationException(
+                                                    "couldn't find and bind a greetings-client IP"));
 
-     details.setRegisteredRedirectUri(Collections
-      .singleton(greetingsClientRedirectUri));
-     return details;
-    })
-   .orElseThrow(
-    () -> new ClientRegistrationException(String.format(
-     "no client %s registered", clientId)));
- }
+                            details.setRegisteredRedirectUri(Collections
+                                    .singleton(greetingsClientRedirectUri));
+                            return details;
+                        })
+                .orElseThrow(
+                        () -> new ClientRegistrationException(String.format(
+                                "no client %s registered", clientId)));
+    }
 }

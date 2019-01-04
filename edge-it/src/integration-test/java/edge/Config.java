@@ -11,19 +11,19 @@ import org.springframework.web.client.RestTemplate;
 @EnableAutoConfiguration
 public class Config {
 
- @Bean
- RestTemplate restTemplate() {
-  return new RestTemplate();
- }
+    @Bean
+    RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 
- @Bean
- RetryTemplate retryTemplate() {
-  RetryTemplate retryTemplate = new RetryTemplate();
-  ExponentialBackOffPolicy backOffPolicy = new ExponentialBackOffPolicy();
-  backOffPolicy.setInitialInterval(30 * 1000);
-  backOffPolicy.setMaxInterval(180 * 1000);
-  retryTemplate.setBackOffPolicy(backOffPolicy);
-  return retryTemplate;
- }
+    @Bean
+    RetryTemplate retryTemplate() {
+        RetryTemplate retryTemplate = new RetryTemplate();
+        ExponentialBackOffPolicy backOffPolicy = new ExponentialBackOffPolicy();
+        backOffPolicy.setInitialInterval(30 * 1000);
+        backOffPolicy.setMaxInterval(180 * 1000);
+        retryTemplate.setBackOffPolicy(backOffPolicy);
+        return retryTemplate;
+    }
 
 }

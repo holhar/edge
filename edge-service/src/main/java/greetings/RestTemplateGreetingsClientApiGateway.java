@@ -11,30 +11,28 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
-@Profile({ "default", "insecure" })
+@Profile({"default", "insecure"})
 @RestController
 @RequestMapping("/api")
 class RestTemplateGreetingsClientApiGateway {
 
- private final RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
- @Autowired
- RestTemplateGreetingsClientApiGateway(
-   @LoadBalanced RestTemplate restTemplate) { // <1>
-  this.restTemplate = restTemplate;
- }
+    @Autowired
+    RestTemplateGreetingsClientApiGateway(@LoadBalanced RestTemplate restTemplate) { // <1>
+        this.restTemplate = restTemplate;
+    }
 
- @GetMapping("/resttemplate/{name}")
- Map<String, String> restTemplate(@PathVariable String name) {
+    @GetMapping("/resttemplate/{name}")
+    Map<String, String> restTemplate(@PathVariable String name) {
 
-  //@formatter:off
-  ParameterizedTypeReference<Map<String, String>> type =
-      new ParameterizedTypeReference<Map<String, String>>() {};
-  //@formatter:on
+        //@formatter:off
+        ParameterizedTypeReference<Map<String, String>> type = new ParameterizedTypeReference<Map<String, String>>() {
+        };
+        //@formatter:on
 
-  ResponseEntity<Map<String, String>> responseEntity = this.restTemplate
-   .exchange("http://greetings-service/greet/{name}", HttpMethod.GET, null,
-    type, name);
-  return responseEntity.getBody();
- }
+        ResponseEntity<Map<String, String>> responseEntity = this.restTemplate
+                .exchange("http://greetings-service/greet/{name}", HttpMethod.GET, null, type, name);
+        return responseEntity.getBody();
+    }
 }

@@ -20,26 +20,26 @@ import java.util.Optional;
 @SpringBootApplication
 public class Html5Client {
 
- private final LoadBalancerClient loadBalancerClient;
+    private final LoadBalancerClient loadBalancerClient;
 
- @Autowired
- Html5Client(LoadBalancerClient loadBalancerClient) {
-  this.loadBalancerClient = loadBalancerClient;
- }
+    @Autowired
+    Html5Client(LoadBalancerClient loadBalancerClient) {
+        this.loadBalancerClient = loadBalancerClient;
+    }
 
- public static void main(String[] args) {
-  SpringApplication.run(Html5Client.class, args);
- }
+    public static void main(String[] args) {
+        SpringApplication.run(Html5Client.class, args);
+    }
 
- // <1>
- //@formatter:off
- @GetMapping(value = "/greetings-client-uri",
-         produces = MediaType.APPLICATION_JSON_VALUE)
- //@formatter:on
- Map<String, String> greetingsClientURI() throws Exception {
-  return Optional
-   .ofNullable(this.loadBalancerClient.choose("greetings-client"))
-   .map(si -> Collections.singletonMap("uri", si.getUri().toString()))
-   .orElse(null);
- }
+    // <1>
+    //@formatter:off
+    @GetMapping(value = "/greetings-client-uri",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    //@formatter:on
+    Map<String, String> greetingsClientURI() throws Exception {
+        return Optional
+                .ofNullable(this.loadBalancerClient.choose("greetings-client"))
+                .map(si -> Collections.singletonMap("uri", si.getUri().toString()))
+                .orElse(null);
+    }
 }

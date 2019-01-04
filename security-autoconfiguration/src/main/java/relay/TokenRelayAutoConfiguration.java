@@ -38,45 +38,45 @@ import org.springframework.web.client.RestTemplate;
 @ConditionalOnClass(EnableResourceServer.class)
 public class TokenRelayAutoConfiguration {
 
- public static final String SECURE_PROFILE = "secure";
+    public static final String SECURE_PROFILE = "secure";
 
- @Configuration
- @Profile("!" + SECURE_PROFILE)
- public static class RestTemplateConfiguration {
+    @Configuration
+    @Profile("!" + SECURE_PROFILE)
+    public static class RestTemplateConfiguration {
 
-  // <1>
-  @Bean
-  @LoadBalanced
-  RestTemplate simpleRestTemplate() {
-   return new RestTemplate();
-  }
- }
+        // <1>
+        @Bean
+        @LoadBalanced
+        RestTemplate simpleRestTemplate() {
+            return new RestTemplate();
+        }
+    }
 
- @Configuration
- @Profile(SECURE_PROFILE)
- public static class SecureRestTemplateConfiguration {
+    @Configuration
+    @Profile(SECURE_PROFILE)
+    public static class SecureRestTemplateConfiguration {
 
-  // <2>
-  @Bean
-  @Lazy
-  @LoadBalanced
-  OAuth2RestTemplate anOAuth2RestTemplate( UserInfoRestTemplateFactory factory) {
-   return factory.getUserInfoRestTemplate();
-  }
- }
+        // <2>
+        @Bean
+        @Lazy
+        @LoadBalanced
+        OAuth2RestTemplate anOAuth2RestTemplate(UserInfoRestTemplateFactory factory) {
+            return factory.getUserInfoRestTemplate();
+        }
+    }
 
- @Configuration
- @Profile(SECURE_PROFILE)
- @ConditionalOnClass(RequestInterceptor.class)
- @ConditionalOnBean(OAuth2ClientContextFilter.class)
- public static class FeignAutoConfiguration {
+    @Configuration
+    @Profile(SECURE_PROFILE)
+    @ConditionalOnClass(RequestInterceptor.class)
+    @ConditionalOnBean(OAuth2ClientContextFilter.class)
+    public static class FeignAutoConfiguration {
 
-  // <3>
-  @Bean
-  RequestInterceptor requestInterceptor(OAuth2ClientContext clientContext ) {
-  return requestTemplate -> requestTemplate.header(HttpHeaders.AUTHORIZATION,
-    clientContext.getAccessToken().getTokenType() + ' '
-     + clientContext.getAccessToken().getValue());
-  }
- }
+        // <3>
+        @Bean
+        RequestInterceptor requestInterceptor(OAuth2ClientContext clientContext) {
+            return requestTemplate -> requestTemplate.header(HttpHeaders.AUTHORIZATION,
+                    clientContext.getAccessToken().getTokenType() + ' '
+                            + clientContext.getAccessToken().getValue());
+        }
+    }
 }

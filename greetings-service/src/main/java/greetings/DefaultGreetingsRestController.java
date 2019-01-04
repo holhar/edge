@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Collections;
 import java.util.Map;
 
-@Profile({ "default", "insecure" })
+@Profile({"default", "insecure"})
 @RestController
 @RequestMapping(method = RequestMethod.GET, value = "/greet/{name}")
 class DefaultGreetingsRestController {
 
- @RequestMapping
- Map<String, String> hi(@PathVariable String name) {
-  return Collections.singletonMap("greeting", "Hello, " + name + "!");
- }
+    @RequestMapping
+    Map<String, String> hi(@PathVariable String name) {
+        return Collections.singletonMap("greeting", "Hello, " + name + "!");
+    }
 }
